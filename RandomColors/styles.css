@@ -1,0 +1,16 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 15rem;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.letter {
+  transition: color 1000ms;
+}
