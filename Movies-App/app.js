@@ -1,10 +1,12 @@
 $("form").on("submit", function (evt) {
   evt.preventDefault();
-  const movieTitle = $("input").eq(0).val();
-  const rating = $("input").eq(1).val();
+  let movieTitle = $("input").eq(0);
+  let rating = $("input").eq(1);
   $(".container").append(
-    `<div class="movie-container"><h2 class="movie-title">Movie: ${movieTitle}</h2><p class="movie-rating"> Rating: ${rating}</p><button class="remove">X</button></div>`
+    `<div class="movie-container"><h2 class="movie-title">Movie: ${movieTitle.val()}</h2><p class="movie-rating"> Rating: ${rating.val()}</p><button class="remove">X</button></div>`
   );
+  movieTitle.val("");
+  rating.val("");
 });
 
 $(".container").on("click", ".remove", function () {
