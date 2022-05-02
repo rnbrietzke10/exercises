@@ -1,0 +1,19 @@
+Part One: Solidify Terminology
+What is HTTP?
+HTTP stands for Hypertext Transfer Protocol and is a set of rules of how browsers and servers can communicate with each other
+What is a URL? 
+URL stands for Uniform Resource Locator and is used to look up the IP address of the resource requested when the URL is entered. The URL is like a nickname for the IP Address.
+What is DNS? 
+Stands form Domain Name System. This is a system that uses the URL to look up the corresponding IP address.
+What is a query string? 
+Extra information added to the end of the URL. It starts with a question mark and then the search parameter or other information is passed in as key value pairs separated by =. Multiple query strings are separated by the &.
+What are two HTTP verbs and how are they different?
+Two HTTP verbs are GET and POST. GET sends a request without altering data on the server and can occur through entering a URL, clicking a link, or submitting a form.. POST sends a request and modifies some data on the server side, this occurs when a form is submitted..
+What is an HTTP request?
+An HTTP request is when the client (browser) asks for data from the server using an HTTP verb such as GET.
+What is an HTTP response? 
+An HTTP response is what the server sends back to the client/browser.
+What is an HTTP header? Give a couple examples of request and response headers you have seen.
+A header is metadata sent to the server or from the server about the specific request and response. Two examples of request headers are the method and the accept-language. Two examples of response headers are the content type and the date.
+What are the processes that happen when you type “http://somesite.com/some/page.html” into a browser?
+The hostname (somesite.com/) is used to determine the IP Address of where the information is located. The port used to access the information is 80 the default port for HTTP request. Then the resources requested (some/page.html)  are retrieved and sent back in a response to the client/browser.
