@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const $showsList = $("#shows-list");
-const $episodesArea = $("#episodes-area");
-const $searchForm = $("#search-form");
+const $showsList = $('#shows-list');
+const $episodesArea = $('#episodes-area');
+const $searchForm = $('#search-form');
 
 /** Given a search term, search for tv shows that match that query.
  *
@@ -48,30 +48,30 @@ function populateShows(shows) {
   $showsList.empty();
 
   for (let show of shows) {
+    const summary = checkSummaryLength(show);
     const $show = $(
       `<div data-show-id="${
         show.show.id
-      }" class="Show col-md-12 col-lg-6 mb-4 ">
-         <div class="media">
+      }" class="Show col-md-3 mb-4 col-sm-6 col-8">
+         <div class="card h-100 ">
            <img
               src=${
                 show.show.image === null
-                  ? "https://tinyurl.com/tv-missing"
+                  ? 'https://tinyurl.com/tv-missing'
                   : show.show.image.medium
               }
               alt="Bletchly Circle San Francisco"
-              class="w-25 mr-3 card-img-top">
-           <div class="media-body">
-             <h5 class="text-primary">${show.show.name}</h5>
-             <div><small>${
-               show.show.summary === null ? "" : show.show.summary
-             }</small></div>
-             <button class="btn btn-outline-light btn-primary btn-sm Show-getEpisodes" id="get-episode-btn">
+              class="card-img-top">
+          
+             <h5 class="card-title text-primary p-3">${show.show.name}</h5>
+              <div class="card-body p-3">
+             ${summary}</div>
+             <button class="btn btn-outline-light btn-primary btn-lg w-auto ms-2 mb-2 Show-getEpisodes" type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="get-episode-btn">
                Episodes
              </button>
            </div>
          </div>
-       </div>
+      
       `
     );
 
@@ -79,19 +79,29 @@ function populateShows(shows) {
   }
 }
 
+function checkSummaryLength(show) {
+  let summary = show.show.summary;
+  if (summary !== null) {
+    console.log(summary.length);
+    if (summary.length > 225) {
+      summary = summary.substr(0, 226) + '...';
+    }
+    return summary;
+  }
+  return '';
+}
 /** Handle search form submission: get shows from API and display.
  *    Hide episodes area (that only gets shown if they ask for episodes)
  */
 
 async function searchForShowAndDisplay() {
-  const term = $("#search-query").val();
+  const term = $('#search-query').val();
   const shows = await getShowsByTerm(term);
 
-  $episodesArea.hide();
   await populateShows(shows.data);
 }
 
-$searchForm.on("submit", async function (evt) {
+$searchForm.on('submit', async function (evt) {
   evt.preventDefault();
   await searchForShowAndDisplay();
 });
@@ -99,7 +109,6 @@ $searchForm.on("submit", async function (evt) {
 /** Given a show ID, get from API and return (promise) array of episodes:
  *      { id, name, season, number }
  */
-// id: 139
 async function getEpisodesOfShow(id) {
   const response = await axios.get(
     `https://api.tvmaze.com/shows/${id}/episodes`
@@ -108,49 +117,30 @@ async function getEpisodesOfShow(id) {
   return response;
 }
 
-/**
-data: Array(62)
-0:
-  airdate: "2012-04-15"
-  airstamp: "2012-04-16T02:30:00+00:00"
-  airtime: "22:30"
-  id: 10820
-  image:
-    medium: "https://static.tvmaze.com/uploads/images/medium_landscape/15/38639.jpg"
-    original: "https://static.tvmaze.com/uploads/images/original_untouched/15/38639.jpg"
-    [[Prototype]]: Object
-  name: "Pilot"
-  number: 1
-  rating: {average: 7.2}
-  runtime: 30
-  season: 1
-  summary: "<p>In the premiere of this comedy about twentysomething women navigating their way through life in New York, Hannah swings and misses at two curves when her parents rescind their financial support and she loses her unpaid internship. Meanwhile, Hannah's roommate, Marnie, throws a dinner party for their nomadic friend Jessa, who's returned from yet another journey.</p>"
-  type: "regular"
-  url: "https://www.tvmaze.com/episodes/10820/girls-1x01-pilot"
- *
- */
-
 /** Write a clear docstring for this function... */
 
+/**
+ * Given an array of episodes create an li with each episode name, season number and episode number
+ *
+ */
 function populateEpisodes(episodes) {
-  $episodesArea.empty();
-
   for (let episode of episodes.data) {
     const $episode = $(`
-  <li>${episode.name}</li>
+  <li>${episode.name} (Season: ${episode.season}, Episode: ${episode.number})</li>
   `);
 
-    $episode.appendTo($("#episodes-list"));
+    $episode.appendTo($('#episodes-list'));
   }
 }
 
-$("body").on("click", "#get-episode-btn", async function () {
-  const id = $(this).closest(".Show").attr("data-show-id");
-  console.log(id);
+/**
+ * When the user clicks on the body if the shows are loaded and the id of the element is #get-episode-btn get the id from the data-show-id attribute for each element
+ */
 
+$('body').on('click', '#get-episode-btn', async function () {
+  const id = $(this).closest('.Show').attr('data-show-id');
+  // pass id to search for episodes based on show id
   const episodes = await getEpisodesOfShow(id);
-
+  // adds episodes to DOM modal
   await populateEpisodes(episodes);
-  //  $episodesArea.css("display", "block");
-  $episodesArea.show();
 });
